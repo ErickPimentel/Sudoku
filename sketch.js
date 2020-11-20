@@ -22,7 +22,7 @@ function setup() {
 
   let solution = JSON.parse(JSON.stringify(grid));
 
-  new solve(solution);
+  new solver(solution);
 
   console.log(grid);
   console.log(solution);
@@ -34,20 +34,33 @@ function setup() {
     if (i != 0) b += 50;
     a = 0;
     for (let j = 0; j < 9; j++) {
-      setTimeout(function(){
-
-
-      } , 200);
       cells[i][j] = new cell(a, b, i, j, solution[i][j]);
       a = a + 50;
     }
   }
   */
-  
+
+
+  a = 0;
+  b = 0;
+  for (let i = 0; i < 9; i++) {
+    if (i != 0) b += 50;
+    a = 0;
+    for (let j = 0; j < 9; j++) {
+      console.log(a, b);
+      cells[i][j] = new cell(a, b, i, j, solution[i][j]);
+      a = a + 50;
+    }
+  }
+
+
 }
 
 function draw() {
   background(51);
+
+  //desenha as listras separam as 9 matrizes
+   new createNineBoxes().show();
 
   //desenha as celulas (que contem os valores aleatorios do grid)
   for (let i = 0; i < 9; i++) {
@@ -56,13 +69,12 @@ function draw() {
     }
   }
 
-  //desenha as listras separam as 9 matrizes
-  new createNineBoxes().show();
+ 
 
 
 }
 
-function cell(a, b, i, j, num) {
+function cell(a, b, i, j, num,) {
   this.a = a;
   this.b = b;
   this.i = i;
@@ -123,7 +135,7 @@ function makeSudoku() {
   return grid;
 }
 
-function solve(matriz){
+function solver(matriz) {
   let find = []
   find = findEmpty(matriz);
 
@@ -131,7 +143,7 @@ function solve(matriz){
   console.log(find[0]);
   console.log(find[1]);
 
-  if (find === false){
+  if (find === false) {
     console.log("entrou no if");
     return true;
   }
@@ -140,11 +152,11 @@ function solve(matriz){
     var [row, col] = find;
   }
 
-  for (let i = 1; i < 10; i++){
-    if (checkValid(matriz, i, [row, col])){
+  for (let i = 1; i < 10; i++) {
+    if (checkValid(matriz, i, [row, col])) {
       matriz[row][col] = i;
 
-      if (solve(matriz)) return true;
+      if (solver(matriz)) return true;
 
       matriz[row][col] = 0
     }
@@ -169,10 +181,10 @@ function checkValid(matriz, num, pos) {
   let box_x = Math.floor(row / 3);
   let box_y = Math.floor(col / 3);
 
-  for (let i = box_x * 3; i < box_x * 3 + 3; i++){
-    for (let j = box_y * 3; j < box_y * 3 + 3; j++){
-      if (matriz[i][j] == num & (i,j) != pos) return false;
-    } 
+  for (let i = box_x * 3; i < box_x * 3 + 3; i++) {
+    for (let j = box_y * 3; j < box_y * 3 + 3; j++) {
+      if (matriz[i][j] == num & (i, j) != pos) return false;
+    }
   }
 
   return true;
@@ -187,4 +199,12 @@ function findEmpty(matriz) {
     }
   }
   return false;
+}
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }

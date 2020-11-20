@@ -14,7 +14,7 @@ function setup() {
     if (i != 0) b += 50;
     a = 0;
     for (let j = 0; j < 9; j++) {
-      cells[i][j] = new cell(a, b, i, j, grid[i][j]);
+      cells[i][j] = new cell(a, b, i, j, grid[i][j], false);
       a = a + 50;
     }
   }
@@ -40,7 +40,6 @@ function setup() {
   }
   */
 
-
   a = 0;
   b = 0;
   for (let i = 0; i < 9; i++) {
@@ -48,7 +47,7 @@ function setup() {
     a = 0;
     for (let j = 0; j < 9; j++) {
       console.log(a, b);
-      cells[i][j] = new cell(a, b, i, j, solution[i][j]);
+      cells[i][j] = new cell(a, b, i, j, solution[i][j], true);
       a = a + 50;
     }
   }
@@ -60,7 +59,7 @@ function draw() {
   background(51);
 
   //desenha as listras separam as 9 matrizes
-   new createNineBoxes().show();
+  new createNineBoxes().show();
 
   //desenha as celulas (que contem os valores aleatorios do grid)
   for (let i = 0; i < 9; i++) {
@@ -69,26 +68,40 @@ function draw() {
     }
   }
 
- 
-
-
 }
 
-function cell(a, b, i, j, num,) {
+function cell(a, b, i, j, num, isSolution) {
   this.a = a;
   this.b = b;
   this.i = i;
   this.j = j;
   this.num = num;
+  this.isSolution = isSolution;
+
 
   this.show = function () {
-    noFill();
-    stroke(255);
-    rect(this.a, this.b, 50, 50);
+    //se for a solucao imprime desta forma
 
-    fill(255);
-    textSize(32);
-    text(this.num, a + 17, b + 40);
+    if (isSolution) {
+      noFill();
+      stroke(255);
+      rect(this.a, this.b, 50, 50);
+
+      fill(100);
+      textSize(32);
+      text(this.num, a + 17, b + 40);
+
+    }
+    //se for a matriz gerada pelo make Sudoku, imprime desta forma
+    else {
+      noFill();
+      stroke(255);
+      rect(this.a, this.b, 50, 50);
+
+      fill(255);
+      textSize(32);
+      text(this.num, a + 17, b + 40);
+    }
   }
 }
 

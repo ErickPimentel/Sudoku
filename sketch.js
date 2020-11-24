@@ -1,7 +1,8 @@
-let cells = [[], [], [], [], [], [], [], [], []];
+let cells_problem = [[], [], [], [], [], [], [], [], []];
+let cells_solution = [[], [], [], [], [], [], [], [], []];
 
 function setup() {
-  createCanvas(450, 450);
+  createCanvas(950, 450);
 
   //cria um grid com numeros aleatorios
   grid = new makeSudoku();
@@ -14,7 +15,7 @@ function setup() {
     if (i != 0) b += 50;
     a = 0;
     for (let j = 0; j < 9; j++) {
-      cells[i][j] = new cell(a, b, i, j, grid[i][j], false);
+      cells_problem[i][j] = new cell(a, b, i, j, grid[i][j]);
       a = a + 50;
     }
   }
@@ -24,34 +25,21 @@ function setup() {
 
   new solver(solution);
 
-  console.log(grid);
-  console.log(solution);
+  console.log("PROBLEMA: ", grid);
+  console.log("SOLUÇÃO:" , solution);
 
-  /*
-  a = 0;
+  
+  a = 500;
   b = 0;
   for (let i = 0; i < 9; i++) {
     if (i != 0) b += 50;
-    a = 0;
+    a = 500;
     for (let j = 0; j < 9; j++) {
-      cells[i][j] = new cell(a, b, i, j, solution[i][j]);
+      cells_solution[i][j] = new cell(a, b, i, j, solution[i][j]);
       a = a + 50;
     }
   }
-  */
-
-  a = 0;
-  b = 0;
-  for (let i = 0; i < 9; i++) {
-    if (i != 0) b += 50;
-    a = 0;
-    for (let j = 0; j < 9; j++) {
-      console.log(a, b);
-      cells[i][j] = new cell(a, b, i, j, solution[i][j], true);
-      a = a + 50;
-    }
-  }
-
+  
 
 }
 
@@ -64,44 +52,49 @@ function draw() {
   //desenha as celulas (que contem os valores aleatorios do grid)
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      cells[i][j].show();
+      cells_problem[i][j].show();
+    }
+  }
+
+  //desenha as celulas (o RESULTADO do grid, ou seja, o array solution)
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      cells_solution[i][j].reshow();
     }
   }
 
 }
 
-function cell(a, b, i, j, num, isSolution) {
+function cell(a, b, i, j, num) {
   this.a = a;
   this.b = b;
   this.i = i;
   this.j = j;
   this.num = num;
-  this.isSolution = isSolution;
 
 
   this.show = function () {
-    //se for a solucao imprime desta forma
-
-    if (isSolution) {
-      noFill();
-      stroke(255);
-      rect(this.a, this.b, 50, 50);
-
-      fill(100);
-      textSize(32);
-      text(this.num, a + 17, b + 40);
-
-    }
     //se for a matriz gerada pelo make Sudoku, imprime desta forma
-    else {
-      noFill();
-      stroke(255);
-      rect(this.a, this.b, 50, 50);
 
-      fill(255);
-      textSize(32);
-      text(this.num, a + 17, b + 40);
-    }
+    noFill();
+    stroke(255);
+    rect(this.a, this.b, 50, 50);
+
+    fill(255);
+    textSize(32);
+    text(this.num, a + 17, b + 40);
+
+  }
+
+  this.reshow = function () {
+
+    noFill();
+    stroke(255);
+    rect(this.a, this.b, 50, 50);
+
+    fill(100);
+    textSize(32);
+    text(this.num, a + 17, b + 40);
   }
 }
 
@@ -131,7 +124,7 @@ function makeSudoku() {
   let col = 0;
   let num = 0;
 
-  for (i = 0; i < 5; i++) {
+  for (i = 0; i < 10; i++) {
     row = Math.floor(random(9));
     col = Math.floor(random(9));
     num = Math.floor(random(1, 10));
@@ -152,16 +145,10 @@ function solver(matriz) {
   let find = []
   find = findEmpty(matriz);
 
-  console.log(find);
-  console.log(find[0]);
-  console.log(find[1]);
-
   if (find === false) {
-    console.log("entrou no if");
     return true;
   }
   else {
-    console.log("entrou no else");
     var [row, col] = find;
   }
 
@@ -190,6 +177,7 @@ function checkValid(matriz, num, pos) {
 
   let row = pos[0];
   let col = pos[1];
+  
   //check box
   let box_x = Math.floor(row / 3);
   let box_y = Math.floor(col / 3);
@@ -214,10 +202,6 @@ function findEmpty(matriz) {
   return false;
 }
 
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
+function sleep(ms) {
+  return new Promise(resolve => setInterval(resolve, ms));
 }

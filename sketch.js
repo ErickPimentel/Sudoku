@@ -1,5 +1,5 @@
-let cells_problem = [[], [], [], [], [], [], [], [], []];
-let cells_solution = [[], [], [], [], [], [], [], [], []];
+let cells_problem = Array(9).fill().map(() => Array(9).fill(0));
+let cells_solution = Array(9).fill().map(() => Array(9).fill(0));
 
 function setup() {
   createCanvas(950, 450);
@@ -20,7 +20,7 @@ function setup() {
     }
   }
 
-
+  
   let solution = JSON.parse(JSON.stringify(grid));
 
   new solver(solution);
@@ -117,7 +117,7 @@ function createNineBoxes() {
 }
 
 function makeSudoku() {
-  grid = [[], [], [], [], [], [], [], [], []];
+  grid = Array(9).fill().map(() => Array(9).fill(0));
 
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
@@ -151,10 +151,13 @@ function solver(matriz) {
   find = findEmpty(matriz);
 
   if (find === false) {
+    console.log("entrou no if");
     return true;
   }
   else {
+    console.log("entrou no else");
     var [row, col] = find;
+    console.log(row, col);
   }
 
   for (let i = 1; i < 10; i++) {
@@ -182,7 +185,7 @@ function checkValid(matriz, num, pos) {
 
   let row = pos[0];
   let col = pos[1];
-  
+
   //check box
   let box_x = Math.floor(row / 3);
   let box_y = Math.floor(col / 3);
@@ -205,8 +208,4 @@ function findEmpty(matriz) {
     }
   }
   return false;
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setInterval(resolve, ms));
 }

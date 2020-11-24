@@ -105,8 +105,13 @@ function createNineBoxes() {
     stroke(255);
     line(150, 0, 150, height);
     line(300, 0, 300, height);
-    line(0, 150, width, 150);
-    line(0, 300, width, 300);
+    line(0, 150, 450, 150);
+    line(0, 300, 450, 300);
+
+    line(650, 0, 650, height);
+    line(800, 0, 800, height);
+    line(500, 150, 950, 150);
+    line(500, 300, 950, 300);
     pop();
   }
 }

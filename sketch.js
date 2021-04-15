@@ -39,7 +39,7 @@ function setup() {
       a = a + 50;
     }
   }
-  
+
 
 }
 
@@ -56,6 +56,7 @@ function draw() {
     }
   }
 
+  
   //desenha as celulas (o RESULTADO do grid, ou seja, o array solution)
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
@@ -119,31 +120,52 @@ function createNineBoxes() {
 function makeSudoku() {
   grid = Array(9).fill().map(() => Array(9).fill(0));
 
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      grid[i][j] = 0;
-    }
-  }
+  grid = JSON.parse(JSON.stringify(randomInsertOneValue(grid)));
 
-  let row = 0;
-  let col = 0;
-  let num = 0;
+  new solver(grid)
 
-  for (i = 0; i < 10; i++) {
-    row = Math.floor(random(9));
-    col = Math.floor(random(9));
-    num = Math.floor(random(1, 10));
-
-    while (!checkValid(grid, num, [row, col]) | grid[row][col] != 0) {
-      row = Math.floor(random(9));
-      col = Math.floor(random(9));
-      num = Math.floor(random(1, 10));
-    }
-
-    grid[row][col] = num;
-  }
+  grid = JSON.parse(JSON.stringify(addEmpty(grid)));
 
   return grid;
+}
+
+function randomInsertOneValue(matriz){
+  for (let i = Math.floor(random(0, 8)); i < 9; i++) {
+    for (let j = Math.floor(random(0, 8)); j < 9; j++) {
+      if (random() > 0.5) {
+        matriz[i][j] = Math.floor(random(1, 10));
+        return matriz;
+      }
+    }
+  }
+}
+
+function addEmpty(matriz){
+  for (let p_X = 0; p_X < 3; p_X++) {
+    for (let p_Y = 0; p_Y < 3; p_Y++) {
+      const box_X = p_X;
+      const box_Y = p_Y;
+      let removedElements = 0;
+      const suposeToRemove = Math.floor(random(4, 7));
+
+      while (removedElements < suposeToRemove) {
+        for (let i = box_Y * 3; i < box_Y * 3 + 3; i++) {
+          for (let j = box_X * 3; j < box_X * 3 + 3; j++) {
+            if (random() > 0.5) {
+              matriz[i][j] = 0;
+              removedElements++;
+            }
+
+            if(removedElements >= suposeToRemove ) break;
+          }
+
+          if(removedElements >= suposeToRemove ) break;
+        }
+      }
+    }
+  }
+
+  return matriz;
 }
 
 function solver(matriz) {
